@@ -1,0 +1,6 @@
+FROM alpine:3.7
+LABEL maintainer='Codeship Inc <maintainers@codeship.com>'
+
+RUN echo "Hello IBM Cloud at $(date)" > hello.txt
+
+CMD ["cat hello.txt"]

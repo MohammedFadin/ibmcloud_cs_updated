@@ -1,0 +1,31 @@
+base:
+  build:
+    image: codeship/ibm-bluemix-base
+    path: ./base
+    dockerfile_path: Dockerfile
+dockercfg_generator:
+  build:
+    image: codeship/ibm-bluemix-dockercfg-generator
+    path: ./dockercfg-generator
+    dockerfile_path: Dockerfile
+  add_docker: true
+  encrypted_env_file: bluemix.env.encrypted
+dockercfg_test:
+  build:
+    image: registry.ng.bluemix.net/bluemix_utilities/codeship-testing
+    path: ./dockercfg-generator
+    dockerfile_path: Dockerfile.test
+deployment:
+  build:
+    image: codeship/ibm-bluemix-deployment
+    path: ./deployment
+    dockerfile_path: Dockerfile
+  environment:
+    - BLUEMIX_API_ENDPOINT=https://api.ng.bluemix.net
+    - BLUEMIX_CONTAINER_SERVICE_HOST=https://us-south.containers.bluemix.net
+    - BLUEMIX_CONTAINER_SERVICE_CLUSTER_NAME=codeship-kubectl-testing
+    - BLUEMIX_ORGANIZATION=bluemix-utilities
+    - BLUEMIX_SPACE=production
+  encrypted_env_file: bluemix.env.encrypted
+  volumes:
+    - ./deployment/tests:/tests
